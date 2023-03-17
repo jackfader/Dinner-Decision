@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Dinner Decision</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<style>body{display:flex;justify-content:center;align-items:center;min-height:100vh;background-color:#fff9c4}.container{max-width:600px;padding:1rem}.yellow{background-color:#fdd835;color:black}.item-row{display:flex;align-items:center}.item-row input{flex:1}.item-row button{margin-left:1rem}.button-row{display:flex;justify-content:center}.button-row button{margin:.5rem}</style>
+</head>
+<body>
+<div class="container"><div class="card"><div class="card-content"><span class="card-title">Dinner Decision</span><div id="restaurants"></div><div class="button-row"><button id="addRestaurant" class="btn yellow">Add Restaurant</button><button id="upForAnything" class="btn yellow" style="display:none;">I am up for anything</button></div><div id="result" class="center-align"></div><div class="button-row"><button id="notThat" class="btn red" style="display:none;">Not that</button><button id="perfect" class="btn green" style="display:none;">Perfect</button></div></div></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+const r = document.getElementById("restaurants"), a = document.getElementById("addRestaurant"), u = document.getElementById("upForAnything"), s = document.getElementById("result"), n = document.getElementById("notThat"), p = document.getElementById("perfect");
+let l = [], i;
+
+const rmv = (row, index) => {r.removeChild(row);l.splice(index, 1);if(l.length<2){u.style.display='none';}};
+const rnd = () => {i=Math.floor(Math.random()*l.length);s.textContent=`Congratulations! You're having ${l[i]} for dinner!`;n.style.display='inline-block';p.style.display='inline-block';};
+
+a.addEventListener("click", () => {
+  const row=document.createElement("div"),inp=document.createElement("input"),btn=document.createElement("button");
+  row.className="item-row";row.id=`row-${l.length}`;inp.placeholder="Restaurant";btn.className="btn red";btn.textContent="Remove";
+  btn.onclick=()=>rmv(row,l.indexOf(inp.value));inp.onchange=(e)=>{l.push(e.target.value);if(l.length>=2){u.style.display='inline-block';}};
+  row.append(inp,btn);r.appendChild(row);
+});
+
+u.onclick=()=>{if(l.length>0){rnd();}else{s.textContent="Please add at least one restaurant.";}};
+n.onclick=()=>{rmv(document.getElementById(`row-${i}`), i);if(l.length===0){s.textContent="";n.style.display='none';p.style.display='none';}else{rnd();}};
+p.onclick=()=>{window.open(`https://www.google.com/maps/search/${encodeURIComponent(l[i])}`,'_blank');};
+</script>
+</body>
+</html>
